@@ -1,15 +1,50 @@
 import { Cell } from "./Cell";
 import { useState, useEffect } from "react";
+import { useAppDispatch } from "../../app/hooks";
+import { addMarkToBoard } from '../game/gameSlice';
+import { findBestMove } from "../../utils/utils"; 
 
 interface BoardProps {
-  boardState: Array<string>;
+  boardState: Array<Array<string | null>>;
+  prevPlayer: string;
   nextPlayer: string;
-  onPlay: (boardState: Array<string>) => void;
+  opponent: string;
+  playerMark: string;
+  cpuMark: string;
+  gameStarted: boolean;
+  onPlay: (i: number, j: number, mark: string) => void;
 }
-export const Board = ({ boardState, nextPlayer, onPlay }: BoardProps) => {
+export const Board = ({ boardState, nextPlayer, playerMark, cpuMark, gameStarted, onPlay }: BoardProps) => {
   const [winner, setWinner] = useState("");
   const cells = [];
 
+  const dispatch = useAppDispatch();
+  // componentDidMount, componentDidUpdate, componentWillMount all combined into one.
+  // If player had decided to play O, then play X on component mount.
+  // handle playing of cpu somewhere else.
+  useEffect(() => {
+    console.log('cpu plays x on component mount');
+
+    async function playCpu() {
+      if (nextPlayer === 'cpu' && gameStarted) {
+        const { i, j } = findBestMove(boardState);
+        if (i < 0 || i > 2 || j < 0 || j > 2) return;
+        // const nextState = [[...boardState[0]], [...boardState[1]], [...boardState[2]]];
+        // nextState[i][j] = cpuMark;
+        // @ts-ignore
+        dispatch(addMarkToBoard({ i, j, mark: cpuMark }));
+      }
+    }
+
+    playCpu();
+  }, [gameStarted, nextPlayer]);
+
+
+  useEffect(() => {
+    checkWinner();
+  }, [boardState]);
+
+  
   const highlightWinningSquares = (
     row: number | undefined,
     col: number | undefined,
@@ -48,13 +83,13 @@ export const Board = ({ boardState, nextPlayer, onPlay }: BoardProps) => {
     let winner = "";
     for (let r = 0; r < 3; r++) {
       if (
-        boardState[r * 3 + 0] !== null &&
-        boardState[r * 3 + 0] === boardState[r * 3 + 1] &&
-        boardState[r * 3 + 1] === boardState[r * 3 + 2]
+        boardState && boardState[r][0] !== null &&
+        boardState[r][0] === boardState[r][1] &&
+        boardState[r][1] === boardState[r][2]
       ) {
-        if (boardState[r * 3 + 0] === "X") {
+        if (boardState[r][0] === "X") {
           winner = "X";
-        } else if (boardState[r * 3 + 0] === "0") {
+        } else if (boardState[r][0] === "0") {
           winner = "0";
         }
 
@@ -66,41 +101,43 @@ export const Board = ({ boardState, nextPlayer, onPlay }: BoardProps) => {
 
     for (let c = 0; c < 3; c++) {
       if (
-        boardState[c] !== null &&
-        boardState[c] === boardState[c + 3] &&
-        boardState[c + 3] === boardState[c + 6]
+        boardState && boardState[0][c] !== null &&
+        boardState[0][c] === boardState[1][c] &&
+        boardState[1][c] === boardState[2][c]
       ) {
-        if (boardState[c] === "X") {
+        if (boardState[0][c] === "X") {
           winner = "X";
-        } else if (boardState[c] === "0") {
+        } else if (boardState[1][c] === "0") {
           winner = "0";
         }
         highlightWinningSquares(undefined, c, undefined);
       }
     }
 
+    // left diagonal
     if (
-      boardState[0] &&
-      boardState[0] === boardState[4] &&
-      boardState[4] === boardState[8]
+      boardState[0][0] &&
+      boardState[0][0] === boardState[1][1] &&
+      boardState[1][1] === boardState[2][2]
     ) {
-      if (boardState[0] === "X") {
+      if (boardState[0][0] === "X") {
         winner = "X";
-      } else if (boardState[0] === "0") {
+      } else if (boardState[0][0] === "0") {
         winner = "0";
       }
 
       highlightWinningSquares(undefined, undefined, "left");
     }
 
+    // right diagonal
     if (
-      boardState[2] &&
-      boardState[2] === boardState[4] &&
-      boardState[4] === boardState[6]
+      boardState[0][2] &&
+      boardState[0][2] === boardState[1][1] &&
+      boardState[1][1] === boardState[2][0]
     ) {
-      if (boardState[2] === "X") {
+      if (boardState[0][2] === "X") {
         winner = "X";
-      } else if (boardState[2] === "0") {
+      } else if (boardState[0][2] === "0") {
         winner = "0";
       }
       highlightWinningSquares(undefined, undefined, "right");
@@ -109,36 +146,29 @@ export const Board = ({ boardState, nextPlayer, onPlay }: BoardProps) => {
     setWinner(winner);
   };
 
-  const handleCellClick = (idx: number) => {
-    if (winner || boardState[idx]) {
+  const handleCellClick = (r: number, c: number) => {
+    if (winner || boardState[r][c]) {
       return;
     }
-    const nextState = boardState.slice();
+    const nextState = [[...boardState[0]], [...boardState[1]], [...boardState[2]]];
 
-    if (nextPlayer === "X") {
+    if (nextPlayer === "player") {
       // setNextPlayer("0");
-      nextState[idx] = "X";
-    } else {
-      // setNextPlayer("X");
-      nextState[idx] = "0";
+      nextState[r][c] = playerMark;
     }
-    onPlay(nextState);
+    onPlay(r, c, playerMark);
   };
 
-  useEffect(() => {
-    checkWinner();
-  }, [boardState]);
 
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 3; c++) {
-      const idx = r * 3 + c;
       cells.push(
         <Cell
           key={`${r}${c}`}
           row={r}
           col={c}
           handleCellClick={handleCellClick}
-          value={boardState[idx]}
+          value={boardState[r][c]}
         />
       );
     }

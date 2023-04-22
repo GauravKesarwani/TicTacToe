@@ -3,8 +3,8 @@ import React from "react";
 interface CellProps {
   row: number;
   col: number;
-  value: string;
-  handleCellClick: (i: number) => void;
+  value: string | null;
+  handleCellClick: (r: number, c: number) => void;
 }
 
 // semantic html
@@ -12,9 +12,8 @@ export const Cell = ({ row, col, value, handleCellClick }: CellProps) => {
   // const [value, setCellValue] = useState("");
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    const idx = row * 3 + col;
     // setCellValue(nextValue);
-    handleCellClick(idx);
+    handleCellClick(row, col);
   };
 
   return (

@@ -1,14 +1,16 @@
 import React from "react";
 
-const GameHistory = ({ history, jumpTo }) => {
-  const removeWinningSquares = () => {
-    const squares = Array.from(document.querySelectorAll(".cell"));
-    squares.forEach(() => {});
-  };
+interface GameHistoryProps {
+  history: Array<Array<Array<string | null>>>;
+  jumpTo: (i: number) => void;
+  removeWinningSquares: () => void;
+}
 
-  const handleJumpTo = () => {
+const GameHistory = ({ history, jumpTo, removeWinningSquares }: GameHistoryProps) => {
+
+  const handleJumpTo = (i: number) => {
     removeWinningSquares();
-    jumpTo();
+    jumpTo(i);
   };
 
   return (
