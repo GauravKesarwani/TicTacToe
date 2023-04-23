@@ -1,0 +1,22 @@
+.cell {
+    height: 40px;
+    flex-basis: 40px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    text-align: center;
+  }
+  
+  .cell[data-id="22"] {
+    border-right: 0;
+    border-bottom: 0;
+  }
+  
+  .cell[data-id="02"],
+  .cell[data-id="12"] {
+    border-right: 0;
+  }
+  
+  .cell[data-id="21"],
+  .cell[data-id="20"] {
+    border-bottom: 0;
+  }

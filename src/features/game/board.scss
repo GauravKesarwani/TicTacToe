@@ -1,0 +1,22 @@
+.grid {
+    margin: 4rem auto;
+    display: flex;
+    flex-flow: row wrap;
+    width: 120px;
+}
+
+.game-stats-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 20vw;
+}
+
+.label-turn {
+    margin: 1rem auto;
+    display: flex;
+}
+
+.winner {
+    background-color: rgb(83, 181, 213);
+}

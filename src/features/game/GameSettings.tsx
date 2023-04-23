@@ -1,6 +1,7 @@
 import { useAppDispatch } from '../../app/hooks';
 import { setOpponent, setPlayerMark } from './gameSlice';
 import { marks } from "../../utils/constants";
+import "./gameSettings.scss";
 
 interface GameSettingProps {
     startGame: () => void;
@@ -42,12 +43,15 @@ const GameSettings = ({ startGame }: GameSettingProps) => {
 
     return (
         <>
-            <button onClick={() => onSelectOpponent("cpu")}>New Game(vs CPU)</button>
-            <button onClick={() => onSelectOpponent("player")}>New Game(vs Player)</button>
+            <div className="new-game-wrapper">
+                <label>START NEW GAME</label>
+                <button className="btn-cpu" onClick={() => onSelectOpponent("cpu")}>VS CPU</button>
+                <button className="btn-player" onClick={() => onSelectOpponent("player")}>VS PLAYER</button>
+            </div>
             <div>Select Player Mark. (Remember X plays first)</div>
-            <div>
-                <button onClick={handleXSelect}>X</button>
-                <button onClick={handleOSelect}>O</button>
+            <div className="btn-selection-container">
+                <button className="btn-x" onClick={handleXSelect}>X</button>
+                <button className="btn-o" onClick={handleOSelect}>O</button>
             </div>
         </>
     )

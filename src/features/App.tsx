@@ -1,45 +1,32 @@
 import "../styles.css";
 import { Board } from "./game/Board";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { addMarkToBoard, update } from './game/gameSlice';
 import GameSettings from "./game/GameSettings";
 import GameHistory from "./gamehistory/GameHistory";
 import GameControls from "./gameControls/GameControls";
-import { findBestMove } from "../utils/utils";
 
 export default function App() {
   const [gameStarted, setGameStarted ] = useState(false);
   
   const dispatch = useAppDispatch();
   // writing succinct code means less bytes in the javascript
-  // commenting out boardState and adding history to be able to jump to any previous state.
-  
-  // const [boardState, setBoardState] = useState(Array(9).fill(null));
-  // const [history, setHistory] = useState([Array(9).fill(null)]);
-  // const [nextPlayer, setNextPlayer] = useState("X");
-
   // @ts-ignore
   const history = useAppSelector(state => state.history.gamehistory);
   const playerMark = useAppSelector(state => state.history.playerMark)
   const cpuMark = useAppSelector(state => state.history.cpuMark)
-  // const state = useAppSelector(state => state);
-  console.log('history', history);
   const boardState = history[history.length - 1];
   // @ts-ignore
   const nextPlayer = useAppSelector(state => state.history.nextPlayer);
   const prevPlayer = useAppSelector(state => state.history.prevPlayer);
   const opponent = useAppSelector(state => state.history.opponent);
 
+
   // const boardState = history[history.length - 1];
-  const handlePlay = (i: number, j: number, mark: string) => {
-
+  const handlePlay = async (i: number, j: number, mark: string) => {
     // dispatch redux action here instead of setting in component state.
-    dispatch(addMarkToBoard({ i, j, mark }));
-    // dispatch(setNextPlayer("cpu"));
-
-    
-    // setHistory([...history, nextState]);
+    return dispatch(addMarkToBoard({ i, j, mark }));
   };
 
   const removeWinningSquares = () => {
@@ -51,11 +38,16 @@ export default function App() {
 
 
   const startGame = () => {
-    setGameStarted(true)
+    setGameStarted(true);
+
+    /* If next player is cpu on game start, then play the first turn */
+    if (nextPlayer === "cpu") {
+      // @ts-ignore
+      dispatch(addMarkToBoard({i: -1, j: -1, cpuMark }));
+    }
   }
 
   const jumpTo = (idx: number) => {
-    // const prevState = history.slice(0, idx + 1);
     dispatch(update(idx))
   };
 

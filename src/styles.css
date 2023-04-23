@@ -7,34 +7,6 @@
   box-sizing: border-box;
 }
 
-.grid {
-  display: flex;
-  flex-flow: row wrap;
-  width: 90px;
-}
-
-.cell {
-  height: 30px;
-  flex-basis: 30px;
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
-  text-align: center;
-}
-
-.cell[data-id="22"] {
-  border-right: 0;
-  border-bottom: 0;
-}
-
-.cell[data-id="02"],
-.cell[data-id="12"] {
-  border-right: 0;
-}
-
-.cell[data-id="21"],
-.cell[data-id="20"] {
-  border-bottom: 0;
-}
 .gameHistory-container {
   width: 80px;
 }
@@ -43,6 +15,3 @@
   width: 120px;
 }
 
-.winner {
-  background-color: lightgreen;
-}
