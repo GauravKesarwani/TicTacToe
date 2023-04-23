@@ -58,19 +58,19 @@ const evaluation = (boardState: Array<Array<string | null>>) => {
    * This assumes the opponent also play optimally.
    */
 
-export const findBestMove = (board: Array<Array<string | null>>, cpuMark = "0") => {
+export const findBestMove = (board: Array<Array<string | null>>, cpuMark = "0", playerMark = "X") => {
     let bestScore = Number.POSITIVE_INFINITY;
     const tempBoard = [[...board[0]], [...board[1]], [...board[2]]];
     let move = { i: -1, j: -1 };
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-            // For all the available spots, the minimizing player takes turn and invokes minimax algorith recursively
+            // For all the available spots, the minimizing player takes turn and invokes minimax algorithm recursively
             if (tempBoard[i][j] === null) {
                 tempBoard[i][j] = cpuMark;
                 // cpu is the minimizing player.
            
                 // next turn is that of the maximizing player
-                let score = miniMax(tempBoard, 0, true);
+                let score = miniMax(tempBoard, 0, true, cpuMark, playerMark);
 
                 /* Since we assume that CPU is the minimizing player so best score will be the minimum 
                   and best move will be the move which makes the score minimum
@@ -97,7 +97,7 @@ export const findBestMove = (board: Array<Array<string | null>>, cpuMark = "0") 
  * @param isMaximizing boolean variable to indicate whether you want to find the best score for maximizer player or minimizer player.
  * @returns 
  */
-function miniMax(board:  Array<Array<string | null>>, depth: number, isMaximizing: boolean) {
+function miniMax(board:  Array<Array<string | null>>, depth: number, isMaximizing: boolean, cpuMark: string, playerMark: string) {
     let result = evaluation(board);
     /**
      * Base Cases.
@@ -113,8 +113,8 @@ function miniMax(board:  Array<Array<string | null>>, depth: number, isMaximizin
             for (let j = 0; j < 3; j++) {
                 // Is the spot available
                 if (board[i][j] === null) {
-                    board[i][j] = 'X';
-                    bestScore = Math.max(miniMax(board, depth + 1, !isMaximizing), bestScore)
+                    board[i][j] = playerMark;
+                    bestScore = Math.max(miniMax(board, depth + 1, !isMaximizing, cpuMark, playerMark), bestScore)
                     board[i][j] = null
                 }
             }
@@ -127,8 +127,8 @@ function miniMax(board:  Array<Array<string | null>>, depth: number, isMaximizin
             for (let j = 0; j < 3; j++) {
                 // Is the spot available
                 if (board[i][j] === null) {
-                    board[i][j] = '0';
-                    bestScore = Math.min(miniMax(board, depth + 1, !isMaximizing), bestScore)
+                    board[i][j] = cpuMark;
+                    bestScore = Math.min(miniMax(board, depth + 1, !isMaximizing, cpuMark, playerMark), bestScore)
                     board[i][j] = null
                 }
             }

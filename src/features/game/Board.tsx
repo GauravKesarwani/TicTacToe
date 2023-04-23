@@ -1,8 +1,6 @@
 import { Cell } from "./Cell";
 import { useState, useEffect } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { addMarkToBoard } from '../game/gameSlice';
-import { findBestMove } from "../../utils/utils"; 
+import "./board.scss";
 
 interface BoardProps {
   boardState: Array<Array<string | null>>;
@@ -14,31 +12,10 @@ interface BoardProps {
   gameStarted: boolean;
   onPlay: (i: number, j: number, mark: string) => void;
 }
-export const Board = ({ boardState, nextPlayer, playerMark, cpuMark, gameStarted, onPlay }: BoardProps) => {
+
+export const Board = ({ boardState, nextPlayer, playerMark, onPlay }: BoardProps) => {
   const [winner, setWinner] = useState("");
   const cells = [];
-
-  const dispatch = useAppDispatch();
-  // componentDidMount, componentDidUpdate, componentWillMount all combined into one.
-  // If player had decided to play O, then play X on component mount.
-  // handle playing of cpu somewhere else.
-  useEffect(() => {
-    console.log('cpu plays x on component mount');
-
-    async function playCpu() {
-      if (nextPlayer === 'cpu' && gameStarted) {
-        const { i, j } = findBestMove(boardState);
-        if (i < 0 || i > 2 || j < 0 || j > 2) return;
-        // const nextState = [[...boardState[0]], [...boardState[1]], [...boardState[2]]];
-        // nextState[i][j] = cpuMark;
-        // @ts-ignore
-        dispatch(addMarkToBoard({ i, j, mark: cpuMark }));
-      }
-    }
-
-    playCpu();
-  }, [gameStarted, nextPlayer]);
-
 
   useEffect(() => {
     checkWinner();
@@ -95,7 +72,6 @@ export const Board = ({ boardState, nextPlayer, playerMark, cpuMark, gameStarted
 
         console.log("check winner", boardState);
         highlightWinningSquares(r, undefined, undefined);
-        // document.querySelector(".cell[data-id=01]")
       }
     }
 
@@ -146,17 +122,11 @@ export const Board = ({ boardState, nextPlayer, playerMark, cpuMark, gameStarted
     setWinner(winner);
   };
 
-  const handleCellClick = (r: number, c: number) => {
+  const handleCellClick = async (r: number, c: number) => {
     if (winner || boardState[r][c]) {
       return;
     }
-    const nextState = [[...boardState[0]], [...boardState[1]], [...boardState[2]]];
-
-    if (nextPlayer === "player") {
-      // setNextPlayer("0");
-      nextState[r][c] = playerMark;
-    }
-    onPlay(r, c, playerMark);
+   onPlay(r, c, playerMark);
   };
 
 
@@ -176,9 +146,11 @@ export const Board = ({ boardState, nextPlayer, playerMark, cpuMark, gameStarted
 
   return (
     <>
-      <div>Next Player: {nextPlayer}</div>
       <div className="grid">{cells}</div>
-      <div>Winner: {winner} </div>
+      <div className="game-stats-container">
+        <label className="label-turn">TURN: {nextPlayer}</label>
+        <label className="winner">Winner: {winner} </label>
+      </div>
     </>
   );
 };

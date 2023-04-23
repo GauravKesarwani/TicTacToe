@@ -1,0 +1,33 @@
+
+.new-game-wrapper {
+    display: flex;
+    max-width: 20vw;
+    margin: 2rem auto;
+    flex-direction: column;
+
+    .btn-cpu {
+        background-color: #1f7435;
+    }
+    
+    .btn-player {
+        background-color: #7975a0;
+    }
+}
+
+
+
+.btn-selection-container {
+    background-color: #000;
+    max-width: 20vw;
+    height: 2.4rem;
+    margin: auto;
+
+    .btn-x,
+    .btn-o {
+        width: 50%;
+    }
+}
+
+button {
+    cursor: pointer;
+}

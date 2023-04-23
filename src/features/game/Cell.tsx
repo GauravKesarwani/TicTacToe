@@ -1,4 +1,5 @@
 import React from "react";
+import "./cell.scss";
 
 interface CellProps {
   row: number;
@@ -9,10 +10,7 @@ interface CellProps {
 
 // semantic html
 export const Cell = ({ row, col, value, handleCellClick }: CellProps) => {
-  // const [value, setCellValue] = useState("");
-
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    // setCellValue(nextValue);
     handleCellClick(row, col);
   };
 
