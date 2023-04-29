@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+html {
+  font-size: 62.5%;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -15,3 +19,7 @@
   width: 120px;
 }
 
+// All labels on page will have font-size of 14px
+label {
+  font-size: 1.4rem;
+}
