@@ -48,10 +48,17 @@ const GameSettings = ({ startGame }: GameSettingProps) => {
                 <button className="btn-cpu" onClick={() => onSelectOpponent("cpu")}>VS CPU</button>
                 <button className="btn-player" onClick={() => onSelectOpponent("player")}>VS PLAYER</button>
             </div>
+
+            <div className="game-level-container">
+                <label className="label-game-level">Select Game Level</label>
+                <button className="btn-easy">Easy</button>
+                <button className="btn-medium">Medium</button>
+                <button className="btn-hard">Hard</button>
+            </div>
             <div>Select Player Mark. (Remember X plays first)</div>
             <div className="btn-selection-container">
-                <button className="btn-x" onClick={handleXSelect}>X</button>
-                <button className="btn-o" onClick={handleOSelect}>O</button>
+                <button className="btn-x" onClick={handleXSelect}>{marks.X}</button>
+                <button className="btn-o" onClick={handleOSelect}>{marks.O}</button>
             </div>
         </>
     )

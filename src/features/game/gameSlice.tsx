@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { marks } from '../../utils/constants';
-import { findBestMove } from '../../utils/utils';
+import { findBestMove, checkWinner } from '../../utils/utils';
 
 export interface GameHistory {
     history: Array<Array<string | null>>;
@@ -11,7 +11,7 @@ export interface GameHistory {
 }
 
 const initialState = {
-    "gamehistory": [
+    gamehistory: [
         [[null, null, null],
         [null, null, null],
         [null, null, null]],
@@ -21,11 +21,12 @@ const initialState = {
         [null, null, null],
         [null, null, null]
     ],
-    "prevPlayer": "",
-    "nextPlayer": "player",
-    "opponent": "cpu",
-    "playerMark": "X",
-    "cpuMark": "0"
+    prevPlayer: "",
+    nextPlayer: "player",
+    opponent: "cpu",
+    playerMark: marks.X,
+    cpuMark: marks.O,
+    winner: ""
 }
 
 interface Mark {
@@ -57,6 +58,13 @@ export const historySlice = createSlice({
                 state.gamehistory.push([[...state.boardState[0]], [...state.boardState[1]], [...state.boardState[2]]]);
             }
           
+            // Check Winner here.
+            let winner = checkWinner(state.boardState);
+
+            if (winner) {
+                state.winner = winner;
+                return;
+            }
 
             // if opponent is cpu and player added mark to board, play cpu automatically.
             if (state.opponent === "cpu" && state.nextPlayer === "cpu") {
@@ -65,6 +73,13 @@ export const historySlice = createSlice({
                 state.boardState[i][j] = state.cpuMark;
                 state.gamehistory.push([[...state.boardState[0]], [...state.boardState[1]], [...state.boardState[2]]]);
                 state.nextPlayer = "player";
+              
+            }
+
+            winner = checkWinner(state.boardState);
+
+            if (winner) {
+                state.winner = winner;
             }
             // }
         },
@@ -73,6 +88,14 @@ export const historySlice = createSlice({
              // @ts-ignore
             state.gamehistory.push(action.payload);
         },
+        
+        reset: (state) => {
+            const row = [null, null, null];
+            state.boardState = [[...row], [...row], [...row]];
+            // splice removes items from start index upto end of array if not specified
+            state.gamehistory.splice(1)
+        },
+
         update: (state, action: PayloadAction<number>) => {
             state.gamehistory.splice(action.payload + 1)
         },
@@ -98,9 +121,6 @@ export const historySlice = createSlice({
 })
 
 // export the actions and reducers from slice file.
-export const { append, update, addMarkToBoard, setOpponent, setPlayerMark } = historySlice.actions;
+export const { append, update, reset, addMarkToBoard, setOpponent, setPlayerMark } = historySlice.actions;
 
 export default historySlice.reducer
-
-
-// ['apple', 'banana', 'oranges'];

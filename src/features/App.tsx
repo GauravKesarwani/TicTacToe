@@ -1,4 +1,4 @@
-import "../styles.css";
+
 import { Board } from "./game/Board";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from '../app/hooks';
@@ -6,6 +6,8 @@ import { addMarkToBoard, update } from './game/gameSlice';
 import GameSettings from "./game/GameSettings";
 import GameHistory from "./gamehistory/GameHistory";
 import GameControls from "./gameControls/GameControls";
+
+import "../app.scss";
 
 export default function App() {
   const [gameStarted, setGameStarted ] = useState(false);
@@ -16,19 +18,19 @@ export default function App() {
   const history = useAppSelector(state => state.history.gamehistory);
   const playerMark = useAppSelector(state => state.history.playerMark)
   const cpuMark = useAppSelector(state => state.history.cpuMark)
-  const boardState = history[history.length - 1];
+  const boardState = useAppSelector(state => state.history.boardState)
   // @ts-ignore
   const nextPlayer = useAppSelector(state => state.history.nextPlayer);
   const prevPlayer = useAppSelector(state => state.history.prevPlayer);
   const opponent = useAppSelector(state => state.history.opponent);
 
-
-  // const boardState = history[history.length - 1];
   const handlePlay = async (i: number, j: number, mark: string) => {
     // dispatch redux action here instead of setting in component state.
     return dispatch(addMarkToBoard({ i, j, mark }));
   };
 
+
+  // you are not doing this the react way.
   const removeWinningSquares = () => {
     const squares = Array.from(document.querySelectorAll(".cell"));
     squares.forEach((el, i) => {

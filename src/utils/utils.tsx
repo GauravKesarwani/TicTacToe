@@ -138,6 +138,107 @@ function miniMax(board:  Array<Array<string | null>>, depth: number, isMaximizin
     }
 }
 
+const highlightWinningSquares = (
+  row: number | undefined,
+  col: number | undefined,
+  diagonal: string | undefined
+) => {
+  if (row !== undefined) {
+    for (let c = 0; c < 3; c++) {
+      const el = document.querySelector(`[data-id="${row}${c}"]`);
+      el?.classList.add("winner");
+    }
+  }
+
+  if (col !== undefined) {
+    for (let r = 0; r < 3; r++) {
+      const el = document.querySelector(`[data-id="${r}${col}"]`);
+      el?.classList.add("winner");
+    }
+  }
+
+  if (diagonal !== undefined) {
+    if (diagonal === "left") {
+      document.querySelector(`[data-id="00"]`)?.classList.add("winner");
+      document.querySelector(`[data-id="11"]`)?.classList.add("winner");
+      document.querySelector(`[data-id="22"]`)?.classList.add("winner");
+    }
+
+    if (diagonal === "right") {
+      document.querySelector(`[data-id="02"]`)?.classList.add("winner");
+      document.querySelector(`[data-id="11"]`)?.classList.add("winner");
+      document.querySelector(`[data-id="20"]`)?.classList.add("winner");
+    }
+  }
+};
+
+
+export const checkWinner = (boardState: Array<Array<string | null>>) => {
+  let winner = "";
+  for (let r = 0; r < 3; r++) {
+    if (
+      boardState && boardState[r][0] !== null &&
+      boardState[r][0] === boardState[r][1] &&
+      boardState[r][1] === boardState[r][2]
+    ) {
+      if (boardState[r][0] === "X") {
+        winner = "X";
+      } else if (boardState[r][0] === "0") {
+        winner = "0";
+      }
+
+      console.log("check winner", boardState);
+      highlightWinningSquares(r, undefined, undefined);
+    }
+  }
+
+  for (let c = 0; c < 3; c++) {
+    if (
+      boardState && boardState[0][c] !== null &&
+      boardState[0][c] === boardState[1][c] &&
+      boardState[1][c] === boardState[2][c]
+    ) {
+      if (boardState[0][c] === "X") {
+        winner = "X";
+      } else if (boardState[1][c] === "0") {
+        winner = "0";
+      }
+      highlightWinningSquares(undefined, c, undefined);
+    }
+  }
+
+  // left diagonal
+  if (
+    boardState[0][0] &&
+    boardState[0][0] === boardState[1][1] &&
+    boardState[1][1] === boardState[2][2]
+  ) {
+    if (boardState[0][0] === "X") {
+      winner = "X";
+    } else if (boardState[0][0] === "0") {
+      winner = "0";
+    }
+
+    highlightWinningSquares(undefined, undefined, "left");
+  }
+
+  // right diagonal
+  if (
+    boardState[0][2] &&
+    boardState[0][2] === boardState[1][1] &&
+    boardState[1][1] === boardState[2][0]
+  ) {
+    if (boardState[0][2] === "X") {
+      winner = "X";
+    } else if (boardState[0][2] === "0") {
+      winner = "0";
+    }
+    highlightWinningSquares(undefined, undefined, "right");
+  }
+
+  return winner;
+};
+
 
 // This is typical DFS algorithm. This is using stack.
 // Applying the lazy manager analogy here. After the lazy manager fills the spot with either "X" or "0", it calls the sub-ordinate in the hierarchy.

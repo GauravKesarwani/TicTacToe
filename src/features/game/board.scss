@@ -2,14 +2,16 @@
     margin: 4rem auto;
     display: flex;
     flex-flow: row wrap;
-    width: 120px;
+    width: 39rem;
 }
 
 .game-stats-container {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 20vw;
+    margin: 2rem auto;
+    width: 18vw;
+
 }
 
 .label-turn {
