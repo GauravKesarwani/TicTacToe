@@ -10,7 +10,6 @@ interface BoardProps {
   opponent: string;
   playerMark: string;
   cpuMark: string;
-  gameStarted: boolean;
   onPlay: (i: number, j: number, mark: string) => void;
 }
 
@@ -50,7 +49,7 @@ export const Board = ({ boardState, nextPlayer, playerMark, onPlay }: BoardProps
       <div className="grid">{cells}</div>
       <div className="game-stats-container">
         <label className="label-turn">It is {nextPlayer === "player" ? "your" : "CPU's"} turn</label>
-        <label className="winner">Winner: {winner} </label>
+        {winner && <label className="label-winner">Winner: {winner} </label>}
       </div>
     </>
   );
