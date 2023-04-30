@@ -44,7 +44,7 @@ const GameHome = ({ startGame }: GameHomeProps) => {
     return (
         <>
             <div className="new-game-wrapper">
-                <label>START NEW GAME</label>
+                <label>Start New Game</label>
                 <button className="btn-cpu" onClick={() => onSelectOpponent("cpu")}>VS CPU</button>
                 <button className="btn-player" onClick={() => onSelectOpponent("player")}>VS PLAYER</button>
             </div>
@@ -55,10 +55,12 @@ const GameHome = ({ startGame }: GameHomeProps) => {
                 <button className="btn-medium">Medium</button>
                 <button className="btn-hard">Hard</button>
             </div>
-            <div>Select Player Mark. (Remember X plays first)</div>
-            <div className="btn-selection-container">
-                <button className="btn-x" onClick={handleXSelect}>{marks.X}</button>
-                <button className="btn-o" onClick={handleOSelect}>{marks.O}</button>
+            <div className="player-mark-container">
+                <label className="player-mark">Select Player Mark. (Remember X plays first)</label>
+                <div className="btn-selection-container">
+                    <button className="btn-x" onClick={handleXSelect}>{marks.X}</button>
+                    <button className="btn-o" onClick={handleOSelect}>{marks.O}</button>
+                </div>
             </div>
         </>
     )

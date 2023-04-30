@@ -17,6 +17,8 @@
 .label-turn {
     margin: 1rem auto;
     display: flex;
+    font-size: 2.2rem;
+    font-weight: 500;
 }
 
 .label-winner {
@@ -27,4 +29,8 @@
     justify-content: center;
     font-size: 1.6rem;
     font-weight: bold;
+}
+
+.winner-cell {
+    background-color: rgb(83, 181, 213);
 }

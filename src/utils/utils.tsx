@@ -146,28 +146,28 @@ const highlightWinningSquares = (
   if (row !== undefined) {
     for (let c = 0; c < 3; c++) {
       const el = document.querySelector(`[data-id="${row}${c}"]`);
-      el?.classList.add("winner");
+      el?.classList.add("winner-cell");
     }
   }
 
   if (col !== undefined) {
     for (let r = 0; r < 3; r++) {
       const el = document.querySelector(`[data-id="${r}${col}"]`);
-      el?.classList.add("winner");
+      el?.classList.add("winner-cell");
     }
   }
 
   if (diagonal !== undefined) {
     if (diagonal === "left") {
-      document.querySelector(`[data-id="00"]`)?.classList.add("winner");
-      document.querySelector(`[data-id="11"]`)?.classList.add("winner");
-      document.querySelector(`[data-id="22"]`)?.classList.add("winner");
+      document.querySelector(`[data-id="00"]`)?.classList.add("winner-cell");
+      document.querySelector(`[data-id="11"]`)?.classList.add("winner-cell");
+      document.querySelector(`[data-id="22"]`)?.classList.add("winner-cell");
     }
 
     if (diagonal === "right") {
-      document.querySelector(`[data-id="02"]`)?.classList.add("winner");
-      document.querySelector(`[data-id="11"]`)?.classList.add("winner");
-      document.querySelector(`[data-id="20"]`)?.classList.add("winner");
+      document.querySelector(`[data-id="02"]`)?.classList.add("winner-cell");
+      document.querySelector(`[data-id="11"]`)?.classList.add("winner-cell");
+      document.querySelector(`[data-id="20"]`)?.classList.add("winner-cell");
     }
   }
 };
@@ -239,6 +239,14 @@ export const checkWinner = (boardState: Array<Array<string | null>>) => {
   return winner;
 };
 
+export const resetWinningSquares = (boardState: Array<Array<string | null>>) => {
+  for (let r = 0; r < boardState.length; r++) {
+    for (let c = 0; c < boardState[0].length; c++) {
+      const el = document.querySelector(`[data-id="${r}${c}"]`);
+      el?.classList.remove('winner-cell');
+    }
+  }
+}
 
 // This is typical DFS algorithm. This is using stack.
 // Applying the lazy manager analogy here. After the lazy manager fills the spot with either "X" or "0", it calls the sub-ordinate in the hierarchy.

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { marks } from '../../utils/constants';
-import { findBestMove, checkWinner } from '../../utils/utils';
+import { findBestMove, checkWinner, resetWinningSquares } from '../../utils/utils';
 
 export interface GameHistory {
     history: Array<Array<string | null>>;
@@ -30,7 +30,9 @@ const initialState = {
     cpuMark: marks.O,
     winner: "",
     restartPrompt: false,
-    gameStatus: "notStarted"
+    gameStatus: "notStarted",
+    gameSettings: false,
+    gameHistoryMode: false,
 }
 
 interface Mark {
@@ -99,10 +101,12 @@ export const historySlice = createSlice({
             // splice removes items from start index upto end of array if not specified
             state.gamehistory.splice(1);
             state.restartPrompt = false;
+            resetWinningSquares(state.boardState);
         },
 
         update: (state, action: PayloadAction<number>) => {
             state.gamehistory.splice(action.payload + 1)
+            state.boardState = state.gamehistory[state.gamehistory.length - 1];
         },
 
         setOpponent: (state, action: PayloadAction<string>) => {
@@ -125,15 +129,28 @@ export const historySlice = createSlice({
 
         setGameStatus: (state, action: PayloadAction<GameStatus>) => {
             state.gameStatus = action.payload;
+
+            if(action.payload === "notStarted") {
+                state.gameSettings = false;
+                historySlice.caseReducers.reset(state);
+            }
         },
 
+        showGameSettings: (state, action: PayloadAction<boolean>) => {
+            state.gameSettings = action.payload;
+        },
         toggleRestartPrompt: (state, action: PayloadAction<boolean>) => {
             state.restartPrompt = action.payload;
+        },
+
+        setGameHistoryMode: (state, action: PayloadAction<boolean>) => {
+            state.gameHistoryMode = action.payload;
         }
+
     }
 })
 
 // export the actions and reducers from slice file.
-export const { append, update, reset, addMarkToBoard, setOpponent, setPlayerMark, setGameStatus, toggleRestartPrompt } = historySlice.actions;
+export const { append, update, reset, addMarkToBoard, setOpponent, setPlayerMark, setGameStatus, toggleRestartPrompt, showGameSettings, setGameHistoryMode } = historySlice.actions;
 
 export default historySlice.reducer
