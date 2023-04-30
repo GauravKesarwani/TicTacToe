@@ -1,4 +1,4 @@
-import { toggleRestartPrompt } from '../game/gameSlice';
+import { toggleRestartPrompt, showGameSettings } from './gameSlice';
 import { useAppDispatch } from '../../app/hooks';
 import IconSettings from '../../assets/settings.svg';
 
@@ -15,13 +15,13 @@ const GameControls = () => {
     }
 
     // TODO: Implementation to be completed
-    const showGameSettings = () => {
-        // dispatch(reset)
+    const handleGameSettings = () => {
+       dispatch(showGameSettings(true))
     }
 
     return (
         <div className="game-controls">
-            <button onClick={showGameSettings}>
+            <button onClick={handleGameSettings}>
                 <img src={IconSettings} className="game-settings" />
             </button>
             <button className="btn-reset" onClick={handleGameReset}>

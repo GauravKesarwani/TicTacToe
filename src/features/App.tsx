@@ -3,14 +3,14 @@ import { Board } from "./game/Board";
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { addMarkToBoard, update, setGameStatus, toggleRestartPrompt } from './game/gameSlice';
 import GameHome from "./game/GameHome";
-import GameHistory from "./gamehistory/GameHistory";
-import GameControls from "./gameControls/GameControls";
+import GameHistory from "./game/GameHistory";
+import GameControls from "./game/GameControls";
+import GameSettingsModal from "./game/GameSettings";
 import RestartModal from "./game/RestartModal";
 
 import "../app.scss";
 
 export default function App() {
-  // const [restartPrompt, setRestartPrompt] = useState(false)
   const dispatch = useAppDispatch();
   // writing succinct code means less bytes in the javascript
   // @ts-ignore
@@ -23,7 +23,9 @@ export default function App() {
   const prevPlayer = useAppSelector(state => state.history.prevPlayer);
   const opponent = useAppSelector(state => state.history.opponent);
   const gameStatus = useAppSelector(state => state.history.gameStatus);
+  const gameSettings = useAppSelector(state => state.history.gameSettings);
   const restartPrompt = useAppSelector(state => state.history.restartPrompt);
+  const gameHistoryMode = useAppSelector(state => state.history.gameHistoryMode);
   const handlePlay = async (i: number, j: number, mark: string) => {
     // dispatch redux action here instead of setting in component state.
     return dispatch(addMarkToBoard({ i, j, mark }));
@@ -68,9 +70,10 @@ export default function App() {
           playerMark={playerMark}
           cpuMark={cpuMark}
         />
-        <GameHistory history={history} jumpTo={jumpTo} removeWinningSquares={removeWinningSquares} />
+        {gameHistoryMode && <GameHistory history={history} jumpTo={jumpTo} removeWinningSquares={removeWinningSquares} />}
       </>}
       {restartPrompt && <RestartModal />}
+      {gameSettings && <GameSettingsModal />}
     </div>
   );
 }

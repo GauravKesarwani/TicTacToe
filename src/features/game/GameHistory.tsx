@@ -15,7 +15,7 @@ const GameHistory = ({ history, jumpTo, removeWinningSquares }: GameHistoryProps
   };
 
   return (
-    <ol className="gamehistory-container">
+    <ul className="gamehistory-container">
       {history.map((h, idx) => {
         let description = "";
         if (idx === 0) {
@@ -29,7 +29,7 @@ const GameHistory = ({ history, jumpTo, removeWinningSquares }: GameHistoryProps
           </li>
         );
       })}
-    </ol>
+    </ul>
   );
 };
 
