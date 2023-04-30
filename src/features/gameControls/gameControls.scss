@@ -1,3 +1,10 @@
+.game-controls {
+    display: flex;
+    width: 39rem; 
+    margin: auto;
+    justify-content: space-between;
+}
+
 .btn-reset {
     width: 4rem;
     height: 4rem;

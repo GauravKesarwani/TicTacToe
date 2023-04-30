@@ -10,6 +10,8 @@ export interface GameHistory {
     cpumark: string;
 }
 
+export type GameStatus = "notStarted" | "inprogress" | "completed";
+
 const initialState = {
     gamehistory: [
         [[null, null, null],
@@ -26,7 +28,9 @@ const initialState = {
     opponent: "cpu",
     playerMark: marks.X,
     cpuMark: marks.O,
-    winner: ""
+    winner: "",
+    restartPrompt: false,
+    gameStatus: "notStarted"
 }
 
 interface Mark {
@@ -93,7 +97,8 @@ export const historySlice = createSlice({
             const row = [null, null, null];
             state.boardState = [[...row], [...row], [...row]];
             // splice removes items from start index upto end of array if not specified
-            state.gamehistory.splice(1)
+            state.gamehistory.splice(1);
+            state.restartPrompt = false;
         },
 
         update: (state, action: PayloadAction<number>) => {
@@ -116,11 +121,19 @@ export const historySlice = createSlice({
                 state.nextPlayer = 'cpu'
             }
             // state.nextPlayer = action.payload;
+        },
+
+        setGameStatus: (state, action: PayloadAction<GameStatus>) => {
+            state.gameStatus = action.payload;
+        },
+
+        toggleRestartPrompt: (state, action: PayloadAction<boolean>) => {
+            state.restartPrompt = action.payload;
         }
     }
 })
 
 // export the actions and reducers from slice file.
-export const { append, update, reset, addMarkToBoard, setOpponent, setPlayerMark } = historySlice.actions;
+export const { append, update, reset, addMarkToBoard, setOpponent, setPlayerMark, setGameStatus, toggleRestartPrompt } = historySlice.actions;
 
 export default historySlice.reducer

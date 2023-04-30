@@ -213,10 +213,10 @@ export const checkWinner = (boardState: Array<Array<string | null>>) => {
     boardState[0][0] === boardState[1][1] &&
     boardState[1][1] === boardState[2][2]
   ) {
-    if (boardState[0][0] === "X") {
-      winner = "X";
-    } else if (boardState[0][0] === "0") {
-      winner = "0";
+    if (boardState[0][0] === marks.X) {
+      winner = marks.X;
+    } else if (boardState[0][0] === marks.O) {
+      winner = marks.O;
     }
 
     highlightWinningSquares(undefined, undefined, "left");
@@ -228,10 +228,10 @@ export const checkWinner = (boardState: Array<Array<string | null>>) => {
     boardState[0][2] === boardState[1][1] &&
     boardState[1][1] === boardState[2][0]
   ) {
-    if (boardState[0][2] === "X") {
-      winner = "X";
-    } else if (boardState[0][2] === "0") {
-      winner = "0";
+    if (boardState[0][2] === marks.X) {
+      winner = marks.X;
+    } else if (boardState[0][2] === marks.O) {
+      winner = marks.O;
     }
     highlightWinningSquares(undefined, undefined, "right");
   }

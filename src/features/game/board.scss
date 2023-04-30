@@ -19,6 +19,12 @@
     display: flex;
 }
 
-.winner {
+.label-winner {
     background-color: rgb(83, 181, 213);
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: bold;
 }
