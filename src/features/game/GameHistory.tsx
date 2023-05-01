@@ -1,5 +1,5 @@
-import React from "react";
-import "../game/gamehistory.scss";
+import React from 'react';
+import '../game/gamehistory.scss';
 
 interface GameHistoryProps {
   history: Array<Array<Array<string | null>>>;
@@ -7,8 +7,11 @@ interface GameHistoryProps {
   removeWinningSquares: () => void;
 }
 
-const GameHistory = ({ history, jumpTo, removeWinningSquares }: GameHistoryProps) => {
-
+const GameHistory = ({
+  history,
+  jumpTo,
+  removeWinningSquares,
+}: GameHistoryProps) => {
   const handleJumpTo = (i: number) => {
     removeWinningSquares();
     jumpTo(i);
@@ -17,7 +20,7 @@ const GameHistory = ({ history, jumpTo, removeWinningSquares }: GameHistoryProps
   return (
     <ul className="gamehistory-container">
       {history.map((h, idx) => {
-        let description = "";
+        let description = '';
         if (idx === 0) {
           description = `Go to game start`;
         } else {
@@ -25,7 +28,9 @@ const GameHistory = ({ history, jumpTo, removeWinningSquares }: GameHistoryProps
         }
         return (
           <li>
-            <button className="btn-step" onClick={() => handleJumpTo(idx)}>{description}</button>
+            <button className="btn-step" onClick={() => handleJumpTo(idx)}>
+              {description}
+            </button>
           </li>
         );
       })}
