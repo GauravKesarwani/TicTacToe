@@ -1,54 +1,54 @@
 .new-game-wrapper {
-    display: flex;
-    max-width: 20vw;
-    margin: 2rem auto;
-    flex-direction: column;
+  display: flex;
+  max-width: 20vw;
+  margin: 2rem auto;
+  flex-direction: column;
 
-    button {
-        margin: 0.5rem auto;
-    }
-    
-    .btn-cpu {
-        background-color: #1f7435;
-    }
-    
-    .btn-player {
-        background-color: #7975a0;
-    }
+  button {
+    margin: 0.5rem auto;
+  }
+
+  .btn-cpu {
+    background-color: #1f7435;
+  }
+
+  .btn-player {
+    background-color: #7975a0;
+  }
 }
 
 .btn-selection-container {
-    background-color: #000;
-    max-width: 20vw;
-    height: 2.4rem;
-    margin: auto;
+  background-color: #000;
+  max-width: 20vw;
+  height: 2.4rem;
+  margin: auto;
 
-    .btn-x,
-    .btn-o {
-        width: 50%;
-    }
+  .btn-x,
+  .btn-o {
+    width: 50%;
+  }
 }
 
 .game-level-container {
-    display: flex;
-    margin: 5rem auto;
-    width: 10vw;
-    flex-direction: column;
-    
-    button {
-        background-color: rgb(242, 177, 55);
-        margin: 0.5rem auto;
-    }
+  display: flex;
+  margin: 5rem auto;
+  width: 10vw;
+  flex-direction: column;
+
+  button {
+    background-color: rgb(242, 177, 55);
+    margin: 0.5rem auto;
+  }
 }
 
 .player-mark-container {
-    font-size: 1.4rem;
-    font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    margin: 5rem auto;
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  margin: 5rem auto;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }

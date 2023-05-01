@@ -1,42 +1,42 @@
 .cell {
-    height: 12rem;
-    width: 12rem;
-    background-color: #b4cf8d;
-    border-radius: 1rem;
-    margin: 0.5rem;
-    text-align: center;
-    font-size: 4rem;
-    box-shadow: 0 5px 5px;  // offset-x offset-y blur-radius spread-radius colors
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    img {
-      width: 8rem;
-      height: 8rem;
-    }
+  height: 12rem;
+  width: 12rem;
+  background-color: #b4cf8d;
+  border-radius: 1rem;
+  margin: 0.5rem;
+  text-align: center;
+  font-size: 4rem;
+  box-shadow: 0 5px 5px; // offset-x offset-y blur-radius spread-radius colors
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 8rem;
+    height: 8rem;
+  }
+  img.mark-hover {
+    display: none;
+  }
+  &:hover {
     img.mark-hover {
-      display: none
-    }
-    &:hover {
-      img.mark-hover {
-        display: flex;
-      }
+      display: flex;
     }
   }
-  
-  .cell[data-id="22"] {
-    border-right: 0;
-    border-bottom: 0;
-  }
-  
-  .cell[data-id="02"],
-  .cell[data-id="12"] {
-    border-right: 0;
-  }
-  
-  .cell[data-id="21"],
-  .cell[data-id="20"] {
-    border-bottom: 0;
-  }
+}
+
+.cell[data-id='22'] {
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.cell[data-id='02'],
+.cell[data-id='12'] {
+  border-right: 0;
+}
+
+.cell[data-id='21'],
+.cell[data-id='20'] {
+  border-bottom: 0;
+}

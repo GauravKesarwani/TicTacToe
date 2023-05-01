@@ -1,16 +1,16 @@
 .restart-modal {
-    display: flex;
-    position: fixed;
-    top: 40vh;
-    width: 100%;
-    background-color: rgb(222, 174, 111);
-    height: 20vh;
-    vertical-align: middle;
-    z-index: 99;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  position: fixed;
+  top: 40vh;
+  width: 100%;
+  background-color: rgb(222, 174, 111);
+  height: 20vh;
+  vertical-align: middle;
+  z-index: 99;
+  justify-content: center;
+  align-items: center;
 
-    button {
-        height: 4rem;
-    }
+  button {
+    height: 4rem;
+  }
 }

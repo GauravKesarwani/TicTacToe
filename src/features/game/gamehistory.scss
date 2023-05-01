@@ -1,13 +1,13 @@
 .gamehistory-container {
-    display: flex;
-    margin: auto;
-    max-width: 20vw;
-    flex-direction: column;
-    list-style: none;
+  display: flex;
+  margin: auto;
+  max-width: 20vw;
+  flex-direction: column;
+  list-style: none;
 
-    .btn-step {
-        margin: 0.5rem auto;
-        background-color: #a2a62dd9;
-        width: 100%;
-    }
+  .btn-step {
+    margin: 0.5rem auto;
+    background-color: #a2a62dd9;
+    width: 100%;
+  }
 }

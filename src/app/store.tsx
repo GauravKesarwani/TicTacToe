@@ -1,20 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 import historyReducer from '../features/game/gameSlice';
 import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from "redux-persist";
-
+import { persistReducer, persistStore } from 'redux-persist';
 
 const persistConfig = {
   key: 'root',
-  storage
-}
+  storage,
+};
 
 const persistedReducer = persistReducer(persistConfig, historyReducer);
 export const store = configureStore({
-  reducer: { 
-    history: persistedReducer 
+  reducer: {
+    history: persistedReducer,
   },
-})
+});
 
 export const persistor = persistStore(store);
 // Infer the `RootState` and `AppDispatch` types from the store itself
@@ -24,6 +23,3 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-
-
