@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { marks } from '../../utils/constants';
+import { Marks, GameStates } from '../../utils/constants';
 import {
   findBestMove,
   checkWinner,
@@ -13,8 +13,6 @@ export interface GameHistory {
   playerMark: string;
   cpumark: string;
 }
-
-export type GameStatus = 'notStarted' | 'inprogress' | 'completed';
 
 const initialState = {
   gamehistory: [
@@ -32,11 +30,11 @@ const initialState = {
   prevPlayer: '',
   nextPlayer: 'player',
   opponent: 'cpu',
-  playerMark: marks.X,
-  cpuMark: marks.O,
+  playerMark: Marks.X,
+  cpuMark: Marks.O,
   winner: '',
   restartPrompt: false,
-  gameStatus: 'notStarted',
+  gameStatus: GameStates.NOT_STARTED,
   gameSettings: false,
   gameHistoryMode: false,
 };
@@ -129,15 +127,15 @@ export const historySlice = createSlice({
       state.opponent = action.payload;
     },
 
-    setPlayerMark: (state, action: PayloadAction<string>) => {
+    setPlayerMark: (state, action: PayloadAction<Marks>) => {
       state.playerMark = action.payload;
 
-      state.playerMark === marks.X
-        ? (state.cpuMark = marks.O)
-        : (state.cpuMark = marks.X);
+      state.playerMark === Marks.X
+        ? (state.cpuMark = Marks.O)
+        : (state.cpuMark = Marks.X);
 
       // Remember X goes first.
-      if (state.playerMark === marks.X) {
+      if (state.playerMark === Marks.X) {
         state.nextPlayer = 'player';
       } else {
         state.nextPlayer = 'cpu';
@@ -145,10 +143,10 @@ export const historySlice = createSlice({
       // state.nextPlayer = action.payload;
     },
 
-    setGameStatus: (state, action: PayloadAction<GameStatus>) => {
+    setGameStatus: (state, action: PayloadAction<GameStates>) => {
       state.gameStatus = action.payload;
 
-      if (action.payload === 'notStarted') {
+      if (action.payload === GameStates.NOT_STARTED) {
         state.gameSettings = false;
         historySlice.caseReducers.reset(state);
       }
@@ -157,6 +155,7 @@ export const historySlice = createSlice({
     showGameSettings: (state, action: PayloadAction<boolean>) => {
       state.gameSettings = action.payload;
     },
+
     toggleRestartPrompt: (state, action: PayloadAction<boolean>) => {
       state.restartPrompt = action.payload;
     },

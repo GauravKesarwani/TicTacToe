@@ -1,6 +1,6 @@
 import React from 'react';
 import './cell.scss';
-import { marks } from '../../utils/constants';
+import { Marks } from '../../utils/constants';
 import IconXActive from '../../assets/x.svg';
 import IconOActive from '../../assets/o.svg';
 import IconXHover from '../../assets/xhover.svg';
@@ -30,14 +30,14 @@ export const Cell = ({
 
   return (
     <div className="cell" data-id={`${row}${col}`} onClick={handleClick}>
-      {value === null && nextPlayerMark === marks.X && (
+      {value === null && nextPlayerMark === Marks.X && (
         <img className="mark-hover" src={IconXHover} alt="" />
       )}
-      {value === null && nextPlayerMark === marks.O && (
+      {value === null && nextPlayerMark === Marks.O && (
         <img className="mark-hover" src={IconOHover} alt="" />
       )}
-      {value === marks.X && <img src={IconXActive} />}
-      {value === marks.O && <img src={IconOActive} />}
+      {value === Marks.X && <img src={IconXActive} />}
+      {value === Marks.O && <img src={IconOActive} />}
     </div>
   );
 };

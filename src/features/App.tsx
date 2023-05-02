@@ -13,6 +13,7 @@ import GameSettingsModal from './game/GameSettings';
 import RestartModal from './game/RestartModal';
 
 import '../app.scss';
+import { GameStates } from '../utils/constants';
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -46,7 +47,7 @@ export default function App() {
   };
 
   const startGame = () => {
-    dispatch(setGameStatus('inprogress'));
+    dispatch(setGameStatus(GameStates.INPROGRESS));
 
     /* If next player is cpu on game start, then play the first turn */
     if (nextPlayer === 'cpu') {
@@ -62,8 +63,10 @@ export default function App() {
   // Somehow the board is being rendered twice.
   return (
     <div className="App">
-      {gameStatus === 'notStarted' && <GameHome startGame={startGame} />}
-      {gameStatus === 'inprogress' && (
+      {gameStatus === GameStates.NOT_STARTED && (
+        <GameHome startGame={startGame} />
+      )}
+      {gameStatus === GameStates.INPROGRESS && (
         <>
           <GameControls />
           <Board

@@ -1,6 +1,6 @@
 import { useAppDispatch } from '../../app/hooks';
-import { setOpponent, setPlayerMark, GameStatus } from './gameSlice';
-import { marks } from '../../utils/constants';
+import { setOpponent, setPlayerMark } from './gameSlice';
+import { Marks } from '../../utils/constants';
 import './gameHome.scss';
 
 interface GameHomeProps {
@@ -21,7 +21,7 @@ const GameHome = ({ startGame }: GameHomeProps) => {
       el.classList.add('selected');
     }
 
-    dispatch(setPlayerMark(marks.X));
+    dispatch(setPlayerMark(Marks.X));
   };
 
   // @ts-ignore
@@ -32,7 +32,7 @@ const GameHome = ({ startGame }: GameHomeProps) => {
       el.classList.add('selected');
     }
 
-    dispatch(setPlayerMark(marks.O));
+    dispatch(setPlayerMark(Marks.O));
   };
 
   const onSelectOpponent = (opponent: string) => {
@@ -67,10 +67,10 @@ const GameHome = ({ startGame }: GameHomeProps) => {
         </label>
         <div className="btn-selection-container">
           <button className="btn-x" onClick={handleXSelect}>
-            {marks.X}
+            {Marks.X}
           </button>
           <button className="btn-o" onClick={handleOSelect}>
-            {marks.O}
+            {Marks.O}
           </button>
         </div>
       </div>
