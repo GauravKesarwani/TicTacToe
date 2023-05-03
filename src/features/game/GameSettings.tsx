@@ -1,11 +1,12 @@
 import { useAppDispatch } from '../../app/hooks';
+import { GameStates } from '../../utils/constants';
 import './gameSettings.scss';
 import { showGameSettings, reset, setGameStatus } from './gameSlice';
 
 const GameSettings = () => {
   const dispatch = useAppDispatch();
   const handleQuitGame = () => {
-    dispatch(setGameStatus('notStarted'));
+    dispatch(setGameStatus(GameStates.NOT_STARTED));
   };
   return (
     <div className="settings-container">

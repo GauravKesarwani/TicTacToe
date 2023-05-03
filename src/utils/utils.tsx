@@ -1,4 +1,4 @@
-import { marks } from './constants';
+import { Marks } from './constants';
 
 const areMovesLeft = (boardState: Array<Array<string | null>>) => {
   for (let r = 0; r < 3; r++) {
@@ -30,7 +30,7 @@ const evaluation = (boardState: Array<Array<string | null>>) => {
       boardState[0][c] === boardState[1][c] &&
       boardState[1][c] === boardState[2][c]
     ) {
-      return boardState[0][c] === marks.X ? 10 : -10;
+      return boardState[0][c] === Marks.X ? 10 : -10;
     }
   }
 
@@ -39,7 +39,7 @@ const evaluation = (boardState: Array<Array<string | null>>) => {
     boardState[0][0] === boardState[1][1] &&
     boardState[1][1] === boardState[2][2]
   ) {
-    return boardState[0][0] === marks.X ? 10 : -10;
+    return boardState[0][0] === Marks.X ? 10 : -10;
   }
 
   if (
@@ -47,7 +47,7 @@ const evaluation = (boardState: Array<Array<string | null>>) => {
     boardState[0][2] === boardState[1][1] &&
     boardState[1][1] === boardState[2][0]
   ) {
-    return boardState[0][2] === marks.X ? 10 : -10;
+    return boardState[0][2] === Marks.X ? 10 : -10;
   }
 
   return 0;
@@ -229,10 +229,10 @@ export const checkWinner = (boardState: Array<Array<string | null>>) => {
     boardState[0][0] === boardState[1][1] &&
     boardState[1][1] === boardState[2][2]
   ) {
-    if (boardState[0][0] === marks.X) {
-      winner = marks.X;
-    } else if (boardState[0][0] === marks.O) {
-      winner = marks.O;
+    if (boardState[0][0] === Marks.X) {
+      winner = Marks.X;
+    } else if (boardState[0][0] === Marks.O) {
+      winner = Marks.O;
     }
 
     highlightWinningSquares(undefined, undefined, 'left');
@@ -244,10 +244,10 @@ export const checkWinner = (boardState: Array<Array<string | null>>) => {
     boardState[0][2] === boardState[1][1] &&
     boardState[1][1] === boardState[2][0]
   ) {
-    if (boardState[0][2] === marks.X) {
-      winner = marks.X;
-    } else if (boardState[0][2] === marks.O) {
-      winner = marks.O;
+    if (boardState[0][2] === Marks.X) {
+      winner = Marks.X;
+    } else if (boardState[0][2] === Marks.O) {
+      winner = Marks.O;
     }
     highlightWinningSquares(undefined, undefined, 'right');
   }

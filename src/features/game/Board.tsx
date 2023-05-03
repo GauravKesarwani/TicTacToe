@@ -1,7 +1,7 @@
 import { Cell } from './Cell';
 import './board.scss';
 import { useAppSelector } from '../../app/hooks';
-import { marks } from '../../utils/constants';
+import { Marks } from '../../utils/constants';
 
 interface BoardProps {
   boardState: Array<Array<string | null>>;
@@ -24,7 +24,7 @@ export const Board = ({
 
   // For the UI state, where should this computation go ?
   let nextPlayerMark =
-    nextPlayer === 'player' && playerMark === marks.X ? marks.X : marks.O;
+    nextPlayer === 'player' && playerMark === Marks.X ? Marks.X : Marks.O;
 
   const handleCellClick = async (r: number, c: number) => {
     if (winner || boardState[r][c]) {
