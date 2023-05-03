@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Marks, GameStates } from '../../utils/constants';
+import { Marks, GameStates, Opponents } from '../../utils/constants';
 import {
   findBestMove,
   checkWinner,
@@ -28,8 +28,8 @@ const initialState = {
     [null, null, null],
   ],
   prevPlayer: '',
-  nextPlayer: 'player',
-  opponent: 'cpu',
+  nextPlayer: Opponents.PLAYER,
+  opponent: Opponents.CPU,
   playerMark: Marks.X,
   cpuMark: Marks.O,
   winner: '',
@@ -54,7 +54,7 @@ export const historySlice = createSlice({
       if (state.nextPlayer === 'player' && i !== -1 && j !== -1) {
         // @ts-ignore
         state.boardState[i][j] = mark;
-        state.nextPlayer = 'cpu';
+        state.nextPlayer = Opponents.CPU;
 
         /* This is to avoid appending in history when cpu's turn is 
                     triggered twice in development during initial mount of 
@@ -80,7 +80,10 @@ export const historySlice = createSlice({
       }
 
       // if opponent is cpu and player added mark to board, play cpu automatically.
-      if (state.opponent === 'cpu' && state.nextPlayer === 'cpu') {
+      if (
+        state.opponent === Opponents.CPU &&
+        state.nextPlayer === Opponents.CPU
+      ) {
         const { i, j } = findBestMove(
           state.boardState,
           state.cpuMark,
@@ -138,9 +141,8 @@ export const historySlice = createSlice({
       if (state.playerMark === Marks.X) {
         state.nextPlayer = 'player';
       } else {
-        state.nextPlayer = 'cpu';
+        state.nextPlayer = Opponents.CPU;
       }
-      // state.nextPlayer = action.payload;
     },
 
     setGameStatus: (state, action: PayloadAction<GameStates>) => {

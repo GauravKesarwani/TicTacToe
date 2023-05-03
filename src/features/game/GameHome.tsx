@@ -1,79 +1,31 @@
-import { useAppDispatch } from '../../app/hooks';
-import { setOpponent, setPlayerMark } from './gameSlice';
-import { Marks } from '../../utils/constants';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setGameStatus, addMarkToBoard } from './gameSlice';
+import { Opponents, GameStates } from '../../utils/constants';
 import './gameHome.scss';
+import OpponentSelectionComponent from '../../components/OpponentSelectionComponent';
+import GameLevelSelectionComponent from '../../components/GameLevelSelectionComponent';
+import PlayerMarkSelectionComponent from '../../components/PlayerMarkSelectionComponent';
 
-interface GameHomeProps {
-  startGame: () => void;
-}
-const GameHome = ({ startGame }: GameHomeProps) => {
+const GameHome = () => {
   const dispatch = useAppDispatch();
-  const cleanSelected = () => {
-    const selectedEl = document.querySelector('.selected');
-    selectedEl?.classList.remove('selected');
-  };
+  const cpuMark = useAppSelector((state) => state.history.cpuMark);
+  const nextPlayer = useAppSelector((state) => state.history.nextPlayer);
 
-  // @ts-ignore
-  const handleXSelect = (ev: MouseEvent<HTMLButtonElement>) => {
-    cleanSelected();
-    const el = ev.target;
-    if (el instanceof HTMLElement) {
-      el.classList.add('selected');
+  const startGame = () => {
+    dispatch(setGameStatus(GameStates.INPROGRESS));
+
+    /* If next player is cpu on game start, then play the first turn */
+    if (nextPlayer === Opponents.CPU) {
+      // @ts-ignore
+      dispatch(addMarkToBoard({ i: -1, j: -1, cpuMark }));
     }
-
-    dispatch(setPlayerMark(Marks.X));
-  };
-
-  // @ts-ignore
-  const handleOSelect = (ev: MouseEvent<HTMLButtonElement>) => {
-    cleanSelected();
-    const el = ev.target; // not always an HTML element.
-    if (el instanceof HTMLElement) {
-      el.classList.add('selected');
-    }
-
-    dispatch(setPlayerMark(Marks.O));
-  };
-
-  const onSelectOpponent = (opponent: string) => {
-    dispatch(setOpponent(opponent));
-    startGame();
   };
 
   return (
     <>
-      <div className="new-game-wrapper">
-        <label>Start New Game</label>
-        <button className="btn-cpu" onClick={() => onSelectOpponent('cpu')}>
-          VS CPU
-        </button>
-        <button
-          className="btn-player"
-          onClick={() => onSelectOpponent('player')}
-        >
-          VS PLAYER
-        </button>
-      </div>
-
-      <div className="game-level-container">
-        <label className="label-game-level">Select Game Level</label>
-        <button className="btn-easy">Easy</button>
-        <button className="btn-medium">Medium</button>
-        <button className="btn-hard">Hard</button>
-      </div>
-      <div className="player-mark-container">
-        <label className="player-mark">
-          Select Player Mark. (Remember X plays first)
-        </label>
-        <div className="btn-selection-container">
-          <button className="btn-x" onClick={handleXSelect}>
-            {Marks.X}
-          </button>
-          <button className="btn-o" onClick={handleOSelect}>
-            {Marks.O}
-          </button>
-        </div>
-      </div>
+      <OpponentSelectionComponent startGame={startGame} />
+      <GameLevelSelectionComponent />
+      <PlayerMarkSelectionComponent />
     </>
   );
 };

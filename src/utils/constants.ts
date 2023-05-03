@@ -1,4 +1,4 @@
-export const opponents = {
+export const Opponents = {
   CPU: 'cpu',
   PLAYER: 'player',
 };
