@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../app/hooks';
-import { setPlayerMark } from '../features/game/gameSlice';
+import { setPlayerMark } from '../features/board/boardSlice';
 import { Marks } from '../utils/constants';
 
 const PlayerMarkSelectionComponent = () => {

@@ -1,12 +1,12 @@
 import { Cell } from './Cell';
 import './board.scss';
 import { useAppSelector } from '../../app/hooks';
-import { Marks } from '../../utils/constants';
+import { Marks, Opponents } from '../../utils/constants';
 
 interface BoardProps {
   boardState: Array<Array<string | null>>;
   prevPlayer: string;
-  nextPlayer: string;
+  currentPlayer: string;
   opponent: string;
   playerMark: string;
   cpuMark: string;
@@ -15,16 +15,18 @@ interface BoardProps {
 
 export const Board = ({
   boardState,
-  nextPlayer,
+  currentPlayer,
   playerMark,
   onPlay,
 }: BoardProps) => {
-  const winner = useAppSelector((state) => state.history.winner);
+  const winner = useAppSelector((state) => state.board.winner);
   const cells = [];
 
   // For the UI state, where should this computation go ?
   let nextPlayerMark =
-    nextPlayer === 'player' && playerMark === Marks.X ? Marks.X : Marks.O;
+    currentPlayer === Opponents.PLAYER && playerMark === Marks.X
+      ? Marks.X
+      : Marks.O;
 
   const handleCellClick = async (r: number, c: number) => {
     if (winner || boardState[r][c]) {
@@ -40,7 +42,7 @@ export const Board = ({
           key={`${r}${c}`}
           row={r}
           col={c}
-          nextTurn={nextPlayer}
+          nextTurn={currentPlayer}
           nextPlayerMark={nextPlayerMark}
           handleCellClick={handleCellClick}
           value={boardState[r][c]}
@@ -54,7 +56,7 @@ export const Board = ({
       <div className="grid">{cells}</div>
       <div className="game-stats-container">
         <label className="label-turn">
-          It is {nextPlayer === 'player' ? 'your' : "CPU's"} turn
+          It is {currentPlayer === 'player' ? 'your' : "CPU's"} turn
         </label>
         {winner && <label className="label-winner">Winner: {winner} </label>}
       </div>

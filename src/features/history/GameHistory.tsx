@@ -1,5 +1,6 @@
 import React from 'react';
-import '../game/gamehistory.scss';
+import { useAppSelector } from '../../app/hooks';
+import './gamehistory.scss';
 
 interface GameHistoryProps {
   history: Array<Array<Array<string | null>>>;
@@ -12,12 +13,15 @@ const GameHistory = ({
   jumpTo,
   removeWinningSquares,
 }: GameHistoryProps) => {
+  const gameHistoryMode = useAppSelector(
+    (state) => state.board.gameHistoryMode
+  );
   const handleJumpTo = (i: number) => {
     removeWinningSquares();
     jumpTo(i);
   };
 
-  return (
+  return gameHistoryMode ? (
     <ul className="gamehistory-container">
       {history.map((h, idx) => {
         let description = '';
@@ -35,6 +39,8 @@ const GameHistory = ({
         );
       })}
     </ul>
+  ) : (
+    <></>
   );
 };
 

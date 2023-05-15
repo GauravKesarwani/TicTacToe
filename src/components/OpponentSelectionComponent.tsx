@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../app/hooks';
-import { setOpponent } from '../features/game/gameSlice';
+import { selectOpponent } from '../features/board/boardSlice';
 
 interface OpponentSelectionProps {
   startGame: () => void;
@@ -9,7 +9,7 @@ const OpponentSelectionComponent = ({ startGame }: OpponentSelectionProps) => {
   const dispatch = useAppDispatch();
 
   const onSelectOpponent = (opponent: string) => {
-    dispatch(setOpponent(opponent));
+    dispatch(selectOpponent(opponent));
     startGame();
   };
 

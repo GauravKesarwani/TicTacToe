@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import historyReducer from '../features/game/gameSlice';
+import gameReducer from '../features/board/boardSlice';
+import appReducer from '../features/game/gameSlice';
+import historyReducer from '../features/history/historySlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
@@ -8,10 +10,15 @@ const persistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, historyReducer);
+const persistedReducer = persistReducer(persistConfig, gameReducer);
+const persistedAppReducer = persistReducer(persistConfig, appReducer);
+const persistedHistoryReducer = persistReducer(persistConfig, historyReducer);
+
 export const store = configureStore({
   reducer: {
-    history: persistedReducer,
+    board: persistedReducer,
+    app: persistedAppReducer,
+    history: persistedHistoryReducer,
   },
 });
 
