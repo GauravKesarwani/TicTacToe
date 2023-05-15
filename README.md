@@ -11,5 +11,4 @@ settings: {}
 }
 
 
-https://github.com/GauravKesarwani/TicTacToe/assets/5545506/f580b9b9-776b-431f-9423-2492c9898579
-
+![Tictactoe-gif](https://github.com/GauravKesarwani/TicTacToe/assets/5545506/8f83b371-40c0-4f78-84f6-205ac3d0c7bb)
