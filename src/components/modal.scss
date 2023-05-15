@@ -1,0 +1,18 @@
+.modal {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 40vh;
+  width: 100%;
+  background-color: rgb(222, 174, 111);
+  height: 20vh;
+  vertical-align: middle;
+  z-index: 99;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    height: 4rem;
+    margin: auto 0.5rem;
+  }
+}

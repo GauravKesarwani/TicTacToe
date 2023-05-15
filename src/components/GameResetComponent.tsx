@@ -1,13 +1,21 @@
-import { toggleRestartPrompt } from '../features/game/gameSlice';
+import { toggleRestartPrompt, resetGame } from '../features/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import RestartModal from '../features/game/RestartModal';
+import ModalComponent from './ModalComponent';
 
 const GameResetComponent = () => {
   const dispatch = useAppDispatch();
-  const restartPrompt = useAppSelector((state) => state.history.restartPrompt);
+  const restartPrompt = useAppSelector((state) => state.board.restartPrompt);
 
   const handleGameReset = () => {
     dispatch(toggleRestartPrompt(true));
+  };
+
+  const handleCancel = () => {
+    dispatch(toggleRestartPrompt(false));
+  };
+
+  const handleRestart = () => {
+    dispatch(resetGame());
   };
 
   return (
@@ -22,7 +30,18 @@ const GameResetComponent = () => {
           </svg>
         </button>
       </div>
-      {restartPrompt && <RestartModal />}
+      {restartPrompt && (
+        <ModalComponent>
+          <div className="restart-modal">
+            <button className="btn-cancel" onClick={handleCancel}>
+              Cancel
+            </button>
+            <button className="btn-quit" onClick={handleRestart}>
+              Restart Game
+            </button>
+          </div>
+        </ModalComponent>
+      )}
     </>
   );
 };
