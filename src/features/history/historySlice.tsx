@@ -29,8 +29,9 @@ export const historySlice = createSlice({
 
       // @ts-ignore
       state.gamehistory.push([
-        [...boardState[0]],
-        [...boardState[1]],
+        // @ts-ignore
+        [...boardState[0]], // @ts-ignore
+        [...boardState[1]], // @ts-ignore
         [...boardState[2]],
       ]);
     },
