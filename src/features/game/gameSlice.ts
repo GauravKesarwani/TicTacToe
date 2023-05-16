@@ -33,15 +33,10 @@ export const gameSlice = createSlice({
         ? (state.cpuMark = Marks.O)
         : (state.cpuMark = Marks.X);
     },
-
-    setWinner: (state, action: PayloadAction<string>) => {
-      state.winner = action.payload;
-    },
   },
 });
 
-export const { setStatus, setWinner, showGameSettings, setPlayerMark } =
-  gameSlice.actions;
+export const { setStatus, showGameSettings, setPlayerMark } = gameSlice.actions;
 
 // Thunks
 // @ts-ignore

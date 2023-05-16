@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { update, append, reset as resetHistory } from '../history/historySlice';
-import { setWinner } from '../game/gameSlice';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Opponents, Marks } from '../../utils/constants';
+import { Opponents } from '../../utils/constants';
 
+export type Winner = 'X' | 'O' | 'draw';
 import {
   findBestMove,
-  checkWinner,
+  validateBoard,
   resetWinningSquares,
 } from '../../utils/utils';
 
@@ -74,6 +74,10 @@ export const boardSlice = createSlice({
     setGameHistoryMode: (state, action: PayloadAction<boolean>) => {
       state.gameHistoryMode = action.payload;
     },
+
+    setWinner: (state, action) => {
+      state.winner = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(update, (state, action) => {
@@ -87,6 +91,7 @@ export const {
   reset,
   addMark,
   togglePlayer,
+  setWinner,
   selectOpponent,
   setCurrentPlayer,
   toggleRestartPrompt,
@@ -127,21 +132,22 @@ const playAndAppendHistory = (data) => {
     await dispatch(togglePlayer());
     // add to history after mark has been added to the board.
     await dispatch(append(state.board.boardState));
-
-    let winner;
-    try {
-      winner = checkWinner(state.board.boardState);
-    } catch (e) {
-      console.log('Error computing the winner', e);
-    }
-
-    if (winner) {
-      dispatch(setWinner(winner));
-      return;
-    }
   };
 };
 
+// @ts-ignore
+const checkWinner = () => async (dispatch, getState) => {
+  let winner: string = '';
+  try {
+    winner = await validateBoard(getState().board.boardState);
+  } catch (e) {
+    console.log('Error computing the winner', e);
+  }
+
+  if (winner) {
+    return dispatch(setWinner(winner));
+  }
+};
 // @ts-ignore
 export const playTurn = (data) => async (dispatch, getState) => {
   let state = getState();
@@ -156,6 +162,7 @@ export const playTurn = (data) => async (dispatch, getState) => {
   if (state.board.currentPlayer === Opponents.PLAYER && i !== -1 && j !== -1) {
     // await playPlayerTurn(dispatch, state, data);
     await dispatch(playAndAppendHistory(data));
+    await dispatch(checkWinner());
   }
 
   // CPU plays automatically after player has played.
@@ -177,6 +184,7 @@ export const playCPU = () => async (dispatch, getState) => {
     );
 
     await dispatch(playAndAppendHistory({ i, j, mark: state.game.cpuMark }));
+    await dispatch(checkWinner());
   }
 };
 
