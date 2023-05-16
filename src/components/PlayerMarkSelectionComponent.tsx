@@ -1,12 +1,9 @@
 import { useAppDispatch } from '../app/hooks';
 import { Marks } from '../utils/constants';
+import { selectPlayer } from '../features/game/gameSlice';
 
-interface PlayerMarkSelectionComponentProps {
-  onMarkSelection: (mark: Marks) => void;
-}
-const PlayerMarkSelectionComponent = ({
-  onMarkSelection,
-}: PlayerMarkSelectionComponentProps) => {
+const PlayerMarkSelectionComponent = () => {
+  const dispatch = useAppDispatch();
   const cleanSelected = () => {
     const selectedEl = document.querySelector('.selected');
     selectedEl?.classList.remove('selected');
@@ -21,7 +18,11 @@ const PlayerMarkSelectionComponent = ({
     }
 
     const mark = el.dataset.mark;
-    await onMarkSelection(mark);
+    if (mark === Marks.X) {
+      await dispatch(selectPlayer(mark));
+    } else if (mark === Marks.O) {
+      await dispatch(selectPlayer(mark));
+    }
   };
 
   return (
