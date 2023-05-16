@@ -1,16 +1,19 @@
 import { useAppDispatch } from '../app/hooks';
-import { setPlayerMark } from '../features/board/boardSlice';
 import { Marks } from '../utils/constants';
 
-const PlayerMarkSelectionComponent = () => {
-  const dispatch = useAppDispatch();
+interface PlayerMarkSelectionComponentProps {
+  onMarkSelection: (mark: Marks) => void;
+}
+const PlayerMarkSelectionComponent = ({
+  onMarkSelection,
+}: PlayerMarkSelectionComponentProps) => {
   const cleanSelected = () => {
     const selectedEl = document.querySelector('.selected');
     selectedEl?.classList.remove('selected');
   };
 
   // @ts-ignore
-  const handleSelect = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleSelect = async (ev: MouseEvent<HTMLButtonElement>) => {
     cleanSelected();
     const el = ev.target;
     if (el instanceof HTMLElement) {
@@ -18,11 +21,7 @@ const PlayerMarkSelectionComponent = () => {
     }
 
     const mark = el.dataset.mark;
-    if (mark === Marks.X) {
-      dispatch(setPlayerMark(Marks.X));
-    } else if (mark === Marks.O) {
-      dispatch(setPlayerMark(Marks.O));
-    }
+    await onMarkSelection(mark);
   };
 
   return (

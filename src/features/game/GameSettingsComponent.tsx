@@ -6,7 +6,7 @@ import IconSettings from '../../assets/settings.svg';
 import { resetGame } from '../board/boardSlice';
 
 const GameSettingsComponent = () => {
-  const gameSettings = useAppSelector((state) => state.app.gameSettings);
+  const gameSettings = useAppSelector((state) => state.game.gameSettings);
   const dispatch = useAppDispatch();
 
   const handleQuitGame = () => {

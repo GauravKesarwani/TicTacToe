@@ -9,8 +9,8 @@ const PlayComponent = () => {
   const dispatch = useAppDispatch();
   // @ts-ignore
   const history = useAppSelector((state) => state.board.gamehistory);
-  const playerMark = useAppSelector((state) => state.board.playerMark);
-  const cpuMark = useAppSelector((state) => state.board.cpuMark);
+  const playerMark = useAppSelector((state) => state.game.playerMark);
+  const cpuMark = useAppSelector((state) => state.game.cpuMark);
   const boardState = useAppSelector((state) => state.board.boardState);
   // @ts-ignore
   const currentPlayer = useAppSelector((state) => state.board.currentPlayer);
@@ -27,7 +27,7 @@ const PlayComponent = () => {
 
   const handlePlay = async (i: number, j: number, mark: string) => {
     // dispatch redux action here instead of setting in component state.
-    return dispatch(playTurn({ i, j, mark }));
+    await dispatch(playTurn({ i, j, mark }));
   };
 
   const jumpTo = (idx: number) => {

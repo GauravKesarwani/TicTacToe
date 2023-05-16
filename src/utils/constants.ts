@@ -5,7 +5,7 @@ export const Opponents = {
 
 export enum Marks {
   X = 'X',
-  O = '0',
+  O = 'O',
 }
 
 export enum GameStates {

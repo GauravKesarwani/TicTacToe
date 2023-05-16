@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { playTurn } from './boardSlice';
-import { setStatus } from '../game/gameSlice';
-import { Opponents, GameStates } from '../../utils/constants';
+import { playCPU } from './boardSlice';
+import { setStatus, selectPlayer } from '../game/gameSlice';
+import { Opponents, GameStates, Marks } from '../../utils/constants';
 import './gameHome.scss';
 import OpponentSelectionComponent from '../../components/OpponentSelectionComponent';
 import GameLevelSelectionComponent from '../../components/GameLevelSelectionComponent';
@@ -9,7 +9,6 @@ import PlayerMarkSelectionComponent from '../../components/PlayerMarkSelectionCo
 
 const GameHome = () => {
   const dispatch = useAppDispatch();
-  const cpuMark = useAppSelector((state) => state.board.cpuMark);
   const currentPlayer = useAppSelector((state) => state.board.currentPlayer);
 
   const startGame = () => {
@@ -18,7 +17,16 @@ const GameHome = () => {
     /* If next player is cpu on game start, then play the first turn */
     if (currentPlayer === Opponents.CPU) {
       // @ts-ignore
-      dispatch(playTurn({ i: -1, j: -1, cpuMark }));
+      dispatch(playCPU());
+    }
+  };
+
+  // A simple deviation in mark - 0 vs O combined with async can easily wasted an hour of yours.
+  const handleMarkSelect = async (mark: Marks) => {
+    if (mark === Marks.X) {
+      await dispatch(selectPlayer(mark));
+    } else if (mark === Marks.O) {
+      await dispatch(selectPlayer(mark));
     }
   };
 
@@ -26,7 +34,7 @@ const GameHome = () => {
     <>
       <OpponentSelectionComponent startGame={startGame} />
       <GameLevelSelectionComponent />
-      <PlayerMarkSelectionComponent />
+      <PlayerMarkSelectionComponent onMarkSelection={handleMarkSelect} />
     </>
   );
 };
