@@ -7,7 +7,7 @@ import { GameStates } from './utils/constants';
 
 export default function App() {
   // writing succinct code means less bytes in the javascript
-  const gameStatus = useAppSelector((state) => state.app.status);
+  const gameStatus = useAppSelector((state) => state.game.status);
 
   return (
     <div className="App">

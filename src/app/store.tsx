@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import gameReducer from '../features/board/boardSlice';
-import appReducer from '../features/game/gameSlice';
+import boardReducer from '../features/board/boardSlice';
+import gameReducer from '../features/game/gameSlice';
 import historyReducer from '../features/history/historySlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -10,14 +10,14 @@ const persistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, gameReducer);
-const persistedAppReducer = persistReducer(persistConfig, appReducer);
+const persistedBoardReducer = persistReducer(persistConfig, boardReducer);
+const persistedGameReducer = persistReducer(persistConfig, gameReducer);
 const persistedHistoryReducer = persistReducer(persistConfig, historyReducer);
 
 export const store = configureStore({
   reducer: {
-    board: persistedReducer,
-    app: persistedAppReducer,
+    board: persistedBoardReducer,
+    game: persistedGameReducer,
     history: persistedHistoryReducer,
   },
 });

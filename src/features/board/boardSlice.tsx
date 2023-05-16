@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { update, append, reset as resetHistory } from '../history/historySlice';
+import { setWinner } from '../game/gameSlice';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Marks, Opponents } from '../../utils/constants';
-import { RootState } from '../../app/store';
+import { Opponents, Marks } from '../../utils/constants';
 
 import {
   findBestMove,
@@ -20,8 +20,6 @@ const initialState = {
   prevPlayer: '',
   currentPlayer: Opponents.PLAYER,
   opponent: Opponents.CPU,
-  playerMark: Marks.X,
-  cpuMark: Marks.O,
   winner: '',
   restartPrompt: false,
   gameHistoryMode: false,
@@ -33,60 +31,14 @@ interface Mark {
   mark: string;
 }
 
-export const gameSlice = createSlice({
+export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
     addMark: (state, action: PayloadAction<Mark>) => {
       const { i, j, mark } = action.payload;
-      if (state.currentPlayer === Opponents.PLAYER && i !== -1 && j !== -1) {
-        // @ts-ignore
-        state.boardState[i][j] = mark;
-        state.currentPlayer = Opponents.CPU;
-
-        /* This is to avoid appending in history when cpu's turn is 
-          triggered again in development during initial mount of 
-          the App. 
-          React mounts a component immeditely again to avoid bugs in production.
-          https://react.dev/learn/synchronizing-with-effects#step-3-add-cleanup-if-needed
-          https://react.dev/learn/synchronizing-with-effects#how-to-handle-the-effect-firing-twice-in-development
-        */
-        // if (state.prevPlayer !== state.currentPlayer) {
-        // @ts-ignore
-      }
-
-      // Check Winner here.
-      let winner = checkWinner(state.boardState);
-
-      if (winner) {
-        state.winner = winner;
-        return;
-      }
-
-      /*
-        If opponent is cpu and player added mark to board, play cpu automatically.
-        If player's mark is O, then CPU plays first.
-      */
-      if (
-        state.opponent === Opponents.CPU &&
-        state.currentPlayer === Opponents.CPU
-      ) {
-        const { i, j } = findBestMove(
-          state.boardState,
-          state.cpuMark,
-          state.playerMark
-        );
-        // @ts-ignore
-        state.boardState[i][j] = state.cpuMark;
-        state.currentPlayer = Opponents.PLAYER;
-      }
-
-      winner = checkWinner(state.boardState);
-
-      if (winner) {
-        state.winner = winner;
-      }
-      // }
+      // @ts-ignore
+      state.boardState[i][j] = mark;
     },
     /**
      * Resets the boardRedux
@@ -99,23 +51,20 @@ export const gameSlice = createSlice({
       resetWinningSquares(state.boardState);
     },
 
+    togglePlayer: (state) => {
+      state.currentPlayer =
+        state.currentPlayer === Opponents.PLAYER
+          ? Opponents.CPU
+          : Opponents.PLAYER;
+      console.log('toggle player', state.currentPlayer);
+    },
+
     selectOpponent: (state, action: PayloadAction<string>) => {
       state.opponent = action.payload;
     },
 
-    setPlayerMark: (state, action: PayloadAction<Marks>) => {
-      state.playerMark = action.payload;
-
-      state.playerMark === Marks.X
-        ? (state.cpuMark = Marks.O)
-        : (state.cpuMark = Marks.X);
-
-      // Remember X goes first.
-      if (state.playerMark === Marks.X) {
-        state.currentPlayer = 'player';
-      } else {
-        state.currentPlayer = Opponents.CPU;
-      }
+    setCurrentPlayer: (state, action: PayloadAction<string>) => {
+      state.currentPlayer = action.payload;
     },
 
     toggleRestartPrompt: (state, action: PayloadAction<boolean>) => {
@@ -137,18 +86,98 @@ export const gameSlice = createSlice({
 export const {
   reset,
   addMark,
+  togglePlayer,
   selectOpponent,
-  setPlayerMark,
+  setCurrentPlayer,
   toggleRestartPrompt,
   setGameHistoryMode,
-} = gameSlice.actions;
+} = boardSlice.actions;
 
 // Thunk function
+
+/** Play player turn, toggle player and append to history */
+// const playPlayerTurn = async (dispatch, state, data) => {
+//   const p = new Promise((resolve, reject) => {
+//     dispatch(addMark(data))
+//     dispatch(togglePlayer());
+//     // add to history after mark has been added to the board.
+//     dispatch(append(state.board.boardState));
+//   });
+//   return p;
+// }
+
+// @ts-ignore
+/**
+ * This function does 3 things
+ * addMark,
+ * togglePlayer turn
+ * append to history
+ * checks winner.
+ * If the current player who plays is player, it automatically plays the cpu turn too.
+ * @param data
+ * @returns
+ */
+// Thunks
+// @ts-ignore
+const playAndAppendHistory = (data) => {
+  // @ts-ignore
+  return async (dispatch, getState) => {
+    const state = getState();
+    await dispatch(addMark(data));
+    await dispatch(togglePlayer());
+    // add to history after mark has been added to the board.
+    await dispatch(append(state.board.boardState));
+
+    let winner;
+    try {
+      winner = checkWinner(state.board.boardState);
+    } catch (e) {
+      console.log('Error computing the winner', e);
+    }
+
+    if (winner) {
+      dispatch(setWinner(winner));
+      return;
+    }
+  };
+};
+
 // @ts-ignore
 export const playTurn = (data) => async (dispatch, getState) => {
-  await dispatch(addMark(data));
-  // add to history after mark has been added to the board.
-  await dispatch(append(getState().boardState));
+  let state = getState();
+  const { i, j } = data;
+  /* This check is to avoid appending in history when cpu's turn is 
+      triggered again in development during initial mount of 
+      the App. 
+      React mounts a component immediately again to avoid bugs in production.
+      https://react.dev/learn/synchronizing-with-effects#step-3-add-cleanup-if-needed
+      https://react.dev/learn/synchronizing-with-effects#how-to-handle-the-effect-firing-twice-in-development
+  */
+  if (state.board.currentPlayer === Opponents.PLAYER && i !== -1 && j !== -1) {
+    // await playPlayerTurn(dispatch, state, data);
+    await dispatch(playAndAppendHistory(data));
+  }
+
+  // CPU plays automatically after player has played.
+  dispatch(playCPU());
+};
+
+// @ts-ignore
+export const playCPU = () => async (dispatch, getState) => {
+  let state = getState();
+  // CPU plays immediately after player has its turn
+  if (
+    state.board.currentPlayer === Opponents.CPU &&
+    state.board.opponent === Opponents.CPU
+  ) {
+    const { i, j } = findBestMove(
+      state.board.boardState,
+      state.game.cpuMark,
+      state.game.playerMark
+    );
+
+    await dispatch(playAndAppendHistory({ i, j, mark: state.game.cpuMark }));
+  }
 };
 
 // @ts-ignore
@@ -156,4 +185,5 @@ export const resetGame = () => (dispatch, getState) => {
   dispatch(reset());
   dispatch(resetHistory());
 };
-export default gameSlice.reducer;
+
+export default boardSlice.reducer;

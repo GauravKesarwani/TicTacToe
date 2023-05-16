@@ -1,6 +1,6 @@
 import { useAppDispatch } from '../app/hooks';
-import { setPlayerMark } from '../features/board/boardSlice';
 import { Marks } from '../utils/constants';
+import { selectPlayer } from '../features/game/gameSlice';
 
 const PlayerMarkSelectionComponent = () => {
   const dispatch = useAppDispatch();
@@ -10,7 +10,7 @@ const PlayerMarkSelectionComponent = () => {
   };
 
   // @ts-ignore
-  const handleSelect = (ev: MouseEvent<HTMLButtonElement>) => {
+  const handleSelect = async (ev: MouseEvent<HTMLButtonElement>) => {
     cleanSelected();
     const el = ev.target;
     if (el instanceof HTMLElement) {
@@ -19,9 +19,9 @@ const PlayerMarkSelectionComponent = () => {
 
     const mark = el.dataset.mark;
     if (mark === Marks.X) {
-      dispatch(setPlayerMark(Marks.X));
+      await dispatch(selectPlayer(mark));
     } else if (mark === Marks.O) {
-      dispatch(setPlayerMark(Marks.O));
+      await dispatch(selectPlayer(mark));
     }
   };
 

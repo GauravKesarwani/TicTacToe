@@ -1,12 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { GameStates } from '../../utils/constants';
+import { GameStates, Marks, Opponents } from '../../utils/constants';
+import { setCurrentPlayer } from '../board/boardSlice';
 
 const initialState = {
   status: GameStates.NOT_STARTED,
+  playerMark: Marks.X,
+  cpuMark: Marks.O,
   gameSettings: false,
+  winner: '',
 };
-export const appSlice = createSlice({
+export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
@@ -21,8 +25,38 @@ export const appSlice = createSlice({
     showGameSettings: (state, action: PayloadAction<boolean>) => {
       state.gameSettings = action.payload;
     },
+
+    setPlayerMark: (state, action: PayloadAction<Marks>) => {
+      state.playerMark = action.payload;
+
+      state.playerMark === Marks.X
+        ? (state.cpuMark = Marks.O)
+        : (state.cpuMark = Marks.X);
+    },
+
+    setWinner: (state, action: PayloadAction<string>) => {
+      state.winner = action.payload;
+    },
   },
 });
 
-export const { setStatus, showGameSettings } = appSlice.actions;
-export default appSlice.reducer;
+export const { setStatus, setWinner, showGameSettings, setPlayerMark } =
+  gameSlice.actions;
+
+// Thunks
+// @ts-ignore
+export const selectPlayer = (data) => async (dispatch, getState) => {
+  dispatch(setPlayerMark(data));
+
+  const state = getState();
+  let currentPlayer;
+  // Remember X goes first.
+  if (state.game.playerMark === Marks.X) {
+    currentPlayer = Opponents.PLAYER;
+  } else {
+    currentPlayer = Opponents.CPU;
+  }
+  await dispatch(setCurrentPlayer(currentPlayer));
+};
+
+export default gameSlice.reducer;

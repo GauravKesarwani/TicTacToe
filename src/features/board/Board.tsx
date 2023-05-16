@@ -32,7 +32,7 @@ export const Board = ({
     if (winner || boardState[r][c]) {
       return;
     }
-    onPlay(r, c, playerMark);
+    await onPlay(r, c, playerMark);
   };
 
   for (let r = 0; r < 3; r++) {
