@@ -25,9 +25,9 @@ const PlayComponent = () => {
     });
   };
 
-  const handlePlay = async (i: number, j: number, mark: string) => {
+  const handlePlay = (i: number, j: number, mark: string) => {
     // dispatch redux action here instead of setting in component state.
-    await dispatch(playTurn({ i, j, mark }));
+    dispatch(playTurn({ i, j, mark }));
   };
 
   const jumpTo = (idx: number) => {

@@ -124,32 +124,29 @@ export const {
  */
 // Thunks
 // @ts-ignore
-const playAndAppendHistory = (data) => {
-  // @ts-ignore
-  return async (dispatch, getState) => {
-    const state = getState();
-    await dispatch(addMark(data));
-    await dispatch(togglePlayer());
-    // add to history after mark has been added to the board.
-    await dispatch(append(state.board.boardState));
-  };
+const playAndAppendHistory = (data) => (dispatch, getState) => {
+  dispatch(addMark(data));
+  dispatch(togglePlayer());
+  // add to history after mark has been added to the board.
+  dispatch(append(getState().board.boardState));
 };
 
 // @ts-ignore
 const checkWinner = () => async (dispatch, getState) => {
   let winner: string = '';
   try {
-    winner = await validateBoard(getState().board.boardState);
+    winner = validateBoard(getState().board.boardState);
   } catch (e) {
     console.log('Error computing the winner', e);
   }
 
   if (winner) {
-    return dispatch(setWinner(winner));
+    dispatch(setWinner(winner));
   }
 };
+
 // @ts-ignore
-export const playTurn = (data) => async (dispatch, getState) => {
+export const playTurn = (data) => (dispatch, getState) => {
   let state = getState();
   const { i, j } = data;
   /* This check is to avoid appending in history when cpu's turn is 
@@ -161,8 +158,8 @@ export const playTurn = (data) => async (dispatch, getState) => {
   */
   if (state.board.currentPlayer === Opponents.PLAYER && i !== -1 && j !== -1) {
     // await playPlayerTurn(dispatch, state, data);
-    await dispatch(playAndAppendHistory(data));
-    await dispatch(checkWinner());
+    dispatch(playAndAppendHistory(data));
+    dispatch(checkWinner());
   }
 
   // CPU plays automatically after player has played.
@@ -170,7 +167,7 @@ export const playTurn = (data) => async (dispatch, getState) => {
 };
 
 // @ts-ignore
-export const playCPU = () => async (dispatch, getState) => {
+export const playCPU = () => (dispatch, getState) => {
   let state = getState();
   // CPU plays immediately after player has its turn
   if (
@@ -183,8 +180,8 @@ export const playCPU = () => async (dispatch, getState) => {
       state.game.playerMark
     );
 
-    await dispatch(playAndAppendHistory({ i, j, mark: state.game.cpuMark }));
-    await dispatch(checkWinner());
+    dispatch(playAndAppendHistory({ i, j, mark: state.game.cpuMark }));
+    dispatch(checkWinner());
   }
 };
 
