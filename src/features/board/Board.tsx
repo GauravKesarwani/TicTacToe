@@ -55,10 +55,14 @@ export const Board = ({
     <>
       <div className="grid">{cells}</div>
       <div className="game-stats-container">
-        <label className="label-turn">
-          It is {currentPlayer === 'player' ? 'your' : "CPU's"} turn
-        </label>
-        {winner && <label className="label-winner">Winner: {winner} </label>}
+        {!winner && (
+          <label className="label-turn">
+            It is {currentPlayer === 'player' ? 'your' : "CPU's"} turn
+          </label>
+        )}
+        {winner === 'draw' && (
+          <label className="label-winner">It's a {winner} </label>
+        )}
       </div>
     </>
   );

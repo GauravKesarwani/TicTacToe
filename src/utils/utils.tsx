@@ -1,4 +1,5 @@
 import { Marks } from './constants';
+import { Winner } from '../features/board/boardSlice';
 
 const areMovesLeft = (boardState: Array<Array<string | null>>) => {
   for (let r = 0; r < 3; r++) {
@@ -187,7 +188,9 @@ const highlightWinningSquares = (
   }
 };
 
-export const checkWinner = (boardState: Array<Array<string | null>>) => {
+export const validateBoard = async (
+  boardState: Array<Array<string | null>>
+) => {
   let winner = '';
   for (let r = 0; r < 3; r++) {
     if (
@@ -252,6 +255,16 @@ export const checkWinner = (boardState: Array<Array<string | null>>) => {
     highlightWinningSquares(undefined, undefined, 'right');
   }
 
+  let allCellsOccupied = true;
+  for (let r = 0; r < boardState.length; r++) {
+    for (let c = 0; c < boardState[0].length; c++) {
+      if (boardState[r][c] === null) {
+        allCellsOccupied = false;
+      }
+    }
+  }
+
+  winner = allCellsOccupied && !winner ? 'draw' : winner;
   return winner;
 };
 
